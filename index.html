@@ -1,52 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="az">
 <head>
-<meta charset="UTF-8">
-<title>Web Builder Pro</title>
-<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Baku Drift Customs</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-<h1>Web Builder Pro</h1>
-<select id="difficulty">
-<option value="easy">Easy</option>
-<option value="medium">Medium</option>
-<option value="hard">Hard</option>
-</select>
-<button onclick="toggleTheme()">Theme</button>
-</header>
+<h1>🚗 Baku Drift Customs</h1>
 
-<div class="workspace">
-
-<div class="preview">
-<h2>Website Preview</h2>
-<div id="siteBox">
-<h3 id="siteTitle">EvTap.az</h3>
-<div id="deployBar" class="hidden"></div>
-<div id="listings"></div>
-</div>
+<div id="menu">
+    <button onclick="startDrift()">🏁 Driftə başla</button>
+    <button onclick="upgradeSpeed()">⚡ Sürəti artır ($<span id="speedCost">50</span>)</button>
+    <button onclick="upgradeHandling()">🎯 İdarəetmə ($<span id="handleCost">50</span>)</button>
 </div>
 
-<div class="editor">
-<h2>Editor</h2>
-<pre><code id="highlight" class="language-python"></code></pre>
-<textarea id="code"></textarea>
-<button onclick="runCode()">Run</button>
+<canvas id="gameCanvas" width="800" height="500"></canvas>
 
-<p id="errorText"></p>
-<p>Mission: <span id="missionNum"></span>/100</p>
-<p>XP: <span id="xp"></span></p>
-<p>Rank: <span id="rank"></span></p>
+<div id="stats">
+    💰 Pul: <span id="money">0</span> |
+    ⚡ Speed: <span id="speed">2</span> |
+    🎯 Handling: <span id="handling">2</span>
 </div>
 
-</div>
-
-<div id="achievement" class="hidden achievement"></div>
-<div id="duelBox" class="hidden duel"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
-<script src="script.js"></script>
+<script src="scripts.js"></script>
 </body>
 </html>
