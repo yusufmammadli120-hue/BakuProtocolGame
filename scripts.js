@@ -1,43 +1,101 @@
-const canvas = document.getElementById("bakuMap");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+let mission = 1;
+let xp = 0;
+let rank = "Beginner";
+let difficulty = "easy";
 
-let step = 0;
-const story = [
-    { title: "Son Zəng", desc: "SF90-ı Rentacardan götür.", char: "İşçi", text: "Bu maşın xüsusidir, loqosuzdur. İmzala və çıx.", money: 5000 },
-    { title: "Məktəb Yolu", desc: "Ağ Şəhər (White City) tərəfə sür.", char: "Yusif", text: "Leyla, maşına bax! Bu gün bizim günümüzdür.", money: 5000 },
-    { title: "TƏLƏ!", desc: "Qara maşınlar yolu kəsdi!", char: "Maskalı Adam", text: "Maşından düş! Qız bizimlə gəlir!", money: 5000 },
-    { title: "Ata Oyanır", desc: "Hakerin yanına get.", char: "Ata", text: "Oğlumu tapmalıyam... Haker, haradadırlar?!", money: 4500 }
-];
+let site = { launched:false };
 
-function nextStep() {
-    step++;
-    if(step < story.length) {
-        updateUI();
-    } else {
-        alert("Böyük Seçim Vaxtı: POLİS yoxsa BANK? (Tezliklə...)");
-        location.reload();
-    }
+const codeArea = document.getElementById("code");
+const highlight = document.getElementById("highlight");
+
+codeArea.addEventListener("input", ()=>{
+highlight.textContent = codeArea.value;
+Prism.highlightElement(highlight);
+});
+
+document.getElementById("difficulty").onchange = e=>{
+difficulty = e.target.value;
+};
+
+function gainXP(amount){
+xp += amount;
+if(xp>500) rank="Developer";
+if(xp>1500) rank="Senior Dev";
+if(xp>3000) rank="Architect";
+document.getElementById("xp").innerText=xp;
+document.getElementById("rank").innerText=rank;
 }
 
-function updateUI() {
-    document.getElementById("mission-title").innerText = story[step].title;
-    document.getElementById("mission-desc").innerText = story[step].desc;
-    document.getElementById("char-name").innerText = story[step].char + ":";
-    document.getElementById("char-text").innerText = story[step].text;
-    document.getElementById("money").innerText = story[step].money;
+function showAchievement(text){
+let box=document.getElementById("achievement");
+box.innerText=text;
+box.classList.remove("hidden");
+setTimeout(()=>box.classList.add("hidden"),3000);
 }
 
-// Bakı küçələrini simulyasiya edən sadə vizual effekt (Cyberpunk vibe)
-function drawBaku() {
-    ctx.fillStyle = "rgba(0,0,0,0.1)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    for(let i=0; i<20; i++) {
-        ctx.strokeStyle = "#00f2ff";
-        ctx.lineWidth = 0.5;
-        ctx.strokeRect(Math.random()*canvas.width, Math.random()*canvas.height, 100, 200);
-    }
-    requestAnimationFrame(drawBaku);
+function deploymentAnimation(){
+let bar=document.getElementById("deployBar");
+bar.classList.remove("hidden");
+bar.style.width="100%";
+setTimeout(()=>{
+bar.style.width="0%";
+bar.classList.add("hidden");
+},2500);
 }
-drawBaku();
+
+function aiDuel(){
+let duel=document.getElementById("duelBox");
+duel.classList.remove("hidden");
+let aiScore=Math.floor(Math.random()*100);
+let playerScore=Math.floor(Math.random()*100);
+duel.innerHTML=`AI Score: ${aiScore}<br>Your Score: ${playerScore}`;
+if(playerScore>aiScore){
+showAchievement("You won the coding duel!");
+gainXP(200);
+}
+}
+
+function runCode(){
+
+let code = codeArea.value;
+
+if(code.includes("launch_site()")){
+deploymentAnimation();
+showAchievement("Site Launched!");
+gainXP(300);
+site.launched=true;
+}
+
+if(code.includes("add_listing")){
+gainXP(50);
+}
+
+if(code.length>20){
+mission++;
+gainXP(100);
+}
+
+if(mission%10===0){
+showAchievement("Level Milestone!");
+}
+
+if(mission%15===0){
+aiDuel();
+}
+
+document.getElementById("missionNum").innerText=mission;
+}
+
+function toggleTheme(){
+if(document.body.classList.contains("neon")){
+document.body.classList.remove("neon");
+document.body.classList.add("dark");
+}else{
+document.body.classList.remove("dark");
+document.body.classList.add("neon");
+}
+}
+
+document.getElementById("xp").innerText=xp;
+document.getElementById("rank").innerText=rank;
+document.getElementById("missionNum").innerText=mission;
