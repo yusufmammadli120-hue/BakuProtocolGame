@@ -1,1 +1,11 @@
-
+body { margin: 0; background: #0a0a0a; color: #00f2ff; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+#game-ui { position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+#mission-info { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.8); padding: 15px; border-left: 5px solid #ff0055; }
+#dialogue-box { 
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    width: 80%; background: rgba(0, 0, 0, 0.9); border: 2px solid #00f2ff;
+    padding: 20px; pointer-events: all;
+}
+#hud { position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.8); padding: 10px; border: 1px solid #00f2ff; }
+button { background: #00f2ff; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+canvas { display: block; background: radial-gradient(circle, #1a1a1a 0%, #000 100%); }
