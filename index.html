@@ -1,1 +1,28 @@
-
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baku Protocol | Prototip</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-ui">
+        <div id="mission-info">
+            <h2 id="mission-title">Missiya: Son Zəng</h2>
+            <p id="mission-desc">SF90-ı Rentacardan götür və məktəbə sür.</p>
+        </div>
+        <div id="dialogue-box">
+            <b id="char-name">Rentacar İşçisi:</b>
+            <p id="char-text">Müqaviləni imzala, amma kiçik hərflərə fikir vermə...</p>
+            <button onclick="nextStep()">Davam et</button>
+        </div>
+        <div id="hud">
+            <span>PUL: <b id="money">5000</b> AZN</span>
+            <span>MAŞIN: <b id="car">SF90 (Logosuz)</b></span>
+        </div>
+    </div>
+    <canvas id="bakuMap"></canvas>
+    <script src="game.js"></script>
+</body>
+</html>
