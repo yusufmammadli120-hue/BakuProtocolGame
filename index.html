@@ -1,28 +1,52 @@
 <!DOCTYPE html>
-<html lang="az">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baku Protocol | Prototip</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Web Builder Pro</title>
+<link href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-ui">
-        <div id="mission-info">
-            <h2 id="mission-title">Missiya: Son Zəng</h2>
-            <p id="mission-desc">SF90-ı Rentacardan götür və məktəbə sür.</p>
-        </div>
-        <div id="dialogue-box">
-            <b id="char-name">Rentacar İşçisi:</b>
-            <p id="char-text">Müqaviləni imzala, amma kiçik hərflərə fikir vermə...</p>
-            <button onclick="nextStep()">Davam et</button>
-        </div>
-        <div id="hud">
-            <span>PUL: <b id="money">5000</b> AZN</span>
-            <span>MAŞIN: <b id="car">SF90 (Logosuz)</b></span>
-        </div>
-    </div>
-    <canvas id="bakuMap"></canvas>
-    <script src="game.js"></script>
+
+<header>
+<h1>Web Builder Pro</h1>
+<select id="difficulty">
+<option value="easy">Easy</option>
+<option value="medium">Medium</option>
+<option value="hard">Hard</option>
+</select>
+<button onclick="toggleTheme()">Theme</button>
+</header>
+
+<div class="workspace">
+
+<div class="preview">
+<h2>Website Preview</h2>
+<div id="siteBox">
+<h3 id="siteTitle">EvTap.az</h3>
+<div id="deployBar" class="hidden"></div>
+<div id="listings"></div>
+</div>
+</div>
+
+<div class="editor">
+<h2>Editor</h2>
+<pre><code id="highlight" class="language-python"></code></pre>
+<textarea id="code"></textarea>
+<button onclick="runCode()">Run</button>
+
+<p id="errorText"></p>
+<p>Mission: <span id="missionNum"></span>/100</p>
+<p>XP: <span id="xp"></span></p>
+<p>Rank: <span id="rank"></span></p>
+</div>
+
+</div>
+
+<div id="achievement" class="hidden achievement"></div>
+<div id="duelBox" class="hidden duel"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
