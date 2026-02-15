@@ -1,101 +1,117 @@
-let mission = 1;
-let xp = 0;
-let rank = "Beginner";
-let difficulty = "easy";
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-let site = { launched:false };
-
-const codeArea = document.getElementById("code");
-const highlight = document.getElementById("highlight");
-
-codeArea.addEventListener("input", ()=>{
-highlight.textContent = codeArea.value;
-Prism.highlightElement(highlight);
-});
-
-document.getElementById("difficulty").onchange = e=>{
-difficulty = e.target.value;
+let car = {
+    x: 400,
+    y: 250,
+    angle: 0,
+    speed: 2,
+    handling: 2,
+    driftScore: 0
 };
 
-function gainXP(amount){
-xp += amount;
-if(xp>500) rank="Developer";
-if(xp>1500) rank="Senior Dev";
-if(xp>3000) rank="Architect";
-document.getElementById("xp").innerText=xp;
-document.getElementById("rank").innerText=rank;
+let money = 0;
+let drifting = false;
+
+let keys = {};
+
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
+
+function update() {
+
+    if (keys["ArrowUp"]) {
+        car.x += Math.cos(car.angle) * car.speed;
+        car.y += Math.sin(car.angle) * car.speed;
+    }
+
+    if (keys["ArrowLeft"]) {
+        car.angle -= 0.05 * car.handling;
+        drifting = true;
+    }
+
+    if (keys["ArrowRight"]) {
+        car.angle += 0.05 * car.handling;
+        drifting = true;
+    }
+
+    if (!keys["ArrowLeft"] && !keys["ArrowRight"]) {
+        drifting = false;
+    }
+
+    if (drifting && keys["ArrowUp"]) {
+        car.driftScore += 1;
+    }
 }
 
-function showAchievement(text){
-let box=document.getElementById("achievement");
-box.innerText=text;
-box.classList.remove("hidden");
-setTimeout(()=>box.classList.add("hidden"),3000);
+function drawCar() {
+    ctx.save();
+    ctx.translate(car.x, car.y);
+    ctx.rotate(car.angle);
+
+    ctx.fillStyle = "red";
+    ctx.fillRect(-15, -10, 30, 20);
+
+    ctx.restore();
 }
 
-function deploymentAnimation(){
-let bar=document.getElementById("deployBar");
-bar.classList.remove("hidden");
-bar.style.width="100%";
-setTimeout(()=>{
-bar.style.width="0%";
-bar.classList.add("hidden");
-},2500);
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawTrack();
+    drawCar();
+
+    ctx.fillStyle = "white";
+    ctx.fillText("Drift Score: " + car.driftScore, 10, 20);
 }
 
-function aiDuel(){
-let duel=document.getElementById("duelBox");
-duel.classList.remove("hidden");
-let aiScore=Math.floor(Math.random()*100);
-let playerScore=Math.floor(Math.random()*100);
-duel.innerHTML=`AI Score: ${aiScore}<br>Your Score: ${playerScore}`;
-if(playerScore>aiScore){
-showAchievement("You won the coding duel!");
-gainXP(200);
-}
+function drawTrack() {
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(50, 50, 700, 400);
 }
 
-function runCode(){
-
-let code = codeArea.value;
-
-if(code.includes("launch_site()")){
-deploymentAnimation();
-showAchievement("Site Launched!");
-gainXP(300);
-site.launched=true;
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
 }
 
-if(code.includes("add_listing")){
-gainXP(50);
+function startDrift() {
+    setTimeout(() => {
+        let earned = Math.floor(car.driftScore / 10);
+        money += earned;
+        car.driftScore = 0;
+        updateStats();
+        alert("Drift bitdi! Qazanc: $" + earned);
+    }, 10000);
 }
 
-if(code.length>20){
-mission++;
-gainXP(100);
+function upgradeSpeed() {
+    let cost = car.speed * 25;
+    if (money >= cost) {
+        money -= cost;
+        car.speed += 0.5;
+        updateStats();
+    }
 }
 
-if(mission%10===0){
-showAchievement("Level Milestone!");
+function upgradeHandling() {
+    let cost = car.handling * 25;
+    if (money >= cost) {
+        money -= cost;
+        car.handling += 0.3;
+        updateStats();
+    }
 }
 
-if(mission%15===0){
-aiDuel();
+function updateStats() {
+    document.getElementById("money").innerText = money;
+    document.getElementById("speed").innerText = car.speed.toFixed(1);
+    document.getElementById("handling").innerText = car.handling.toFixed(1);
+    document.getElementById("speedCost").innerText = Math.floor(car.speed * 25);
+    document.getElementById("handleCost").innerText = Math.floor(car.handling * 25);
 }
 
-document.getElementById("missionNum").innerText=mission;
-}
-
-function toggleTheme(){
-if(document.body.classList.contains("neon")){
-document.body.classList.remove("neon");
-document.body.classList.add("dark");
-}else{
-document.body.classList.remove("dark");
-document.body.classList.add("neon");
-}
-}
-
-document.getElementById("xp").innerText=xp;
-document.getElementById("rank").innerText=rank;
-document.getElementById("missionNum").innerText=mission;
+updateStats();
+gameLoop();
